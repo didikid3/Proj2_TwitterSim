@@ -1,8 +1,11 @@
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 
@@ -28,18 +31,24 @@ public class Admin implements ActionListener{
 
 	private Admin() {
 	
-		root =  new DefaultMutableTreeNode("Root");
-		userTree = new JTree(root);
-		pL.add(userTree);
 		
+		createLeftPanel();
 		createRightPanel();
 		createMainPane();
 		frame.add(mainPane);
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Admin Window");
-		frame.setSize(800, 300);
+		frame.setSize(800, 500);
 		frame.setVisible(true);
+	}
+	
+	private void createLeftPanel() {
+		root =  new DefaultMutableTreeNode("Root");
+		DefaultMutableTreeNode vegetableNode = new DefaultMutableTreeNode("Vegetables");
+		root.add(vegetableNode);
+		userTree = new JTree(root);
+		pL.add(new JScrollPane(userTree));
 	}
 	
 	private void createRightLowerPanel() {
@@ -47,6 +56,11 @@ public class Admin implements ActionListener{
 		groupTotal = new JButton("Show Group Total");
 		messageTotal = new JButton("Show Message Total");
 		positivePercentage = new JButton("Show Positive Percentage");
+		
+		userTotal.addActionListener(this);
+		groupTotal.addActionListener(this);
+		messageTotal.addActionListener(this);
+		positivePercentage.addActionListener(this);
 		
 		JSplitPane tmp1 = new JSplitPane(SwingConstants.HORIZONTAL, userTotal, messageTotal);
 		JSplitPane tmp2 = new JSplitPane(SwingConstants.HORIZONTAL, groupTotal, positivePercentage);
@@ -69,6 +83,10 @@ public class Admin implements ActionListener{
 		addUser = new JButton("Add User");
 		addGroup = new JButton("Add Group");
 		openUser = new JButton("Open User View");
+		
+		addUser.addActionListener(this);
+		addGroup.addActionListener(this);
+		openUser.addActionListener(this);
 		
 		JSplitPane tmp1 = new JSplitPane(SwingConstants.HORIZONTAL, userID, addUser);
 		JSplitPane tmp2 = new JSplitPane(SwingConstants.HORIZONTAL, groupID, addGroup);
@@ -107,8 +125,27 @@ public class Admin implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		
+			if (e.getSource() == addUser) {
+				
+			}
+			else if(e.getSource() == addGroup) {
+				
+			}
+			else if(e.getSource() == openUser) {
+				
+			}
+			else if(e.getSource() == userTotal) {
+				
+			}
+			else if(e.getSource() == groupTotal) {
+				
+			}
+			else if(e.getSource() == messageTotal) {
+				
+			}
+			else if(e.getSource() == positivePercentage) {
+				
+			}
 	}
 	
 
