@@ -30,8 +30,6 @@ public class Admin implements ActionListener{
 	private JSplitPane mainPane, right;
 
 	private Admin() {
-	
-		
 		createLeftPanel();
 		createRightPanel();
 		createMainPane();
@@ -126,7 +124,7 @@ public class Admin implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == addUser) {
-				
+				System.out.println(userTree.getSelectionPath());
 			}
 			else if(e.getSource() == addGroup) {
 				
