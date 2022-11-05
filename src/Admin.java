@@ -11,6 +11,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
 import Groups.*;
+import VisitUser.*;
 
 
 public class Admin implements ActionListener{
@@ -135,6 +136,10 @@ public class Admin implements ActionListener{
 		User tmp = new User(name);
 		top.add(tmp);
 		
+		UserGroup userGroup = (UserGroup) top;
+		List<GroupComponent> tmpList = userGroup.getList();
+		tmpList.add((GroupComponent)tmp);
+		
 		//Let JTree know that TreeModel was updated with new node
 		((DefaultTreeModel) userList.getModel()).
 			nodesWereInserted(top,new int[]{top.getChildCount()-1});
@@ -142,7 +147,13 @@ public class Admin implements ActionListener{
 	
 	private void addGroup(DefaultMutableTreeNode top, String name) {
 		UserGroup tmp = new UserGroup(name);
+		List<GroupComponent> newList = new ArrayList<>();
+		tmp.setList(newList);
 		top.add(tmp);
+		
+		UserGroup userGroup = (UserGroup) top;
+		List<GroupComponent> tmpList = userGroup.getList();
+		tmpList.add((GroupComponent)tmp);
 		
 		//Let JTree know that TreeModel was updated with new node
 		((DefaultTreeModel) userList.getModel()).
@@ -152,6 +163,9 @@ public class Admin implements ActionListener{
 	
 	private void addUserButtonClicked() {
 		String uID = userID.getText();
+		if (uID == "") {
+			return;
+		}
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
 			 userList.getLastSelectedPathComponent();
 		
@@ -176,6 +190,9 @@ public class Admin implements ActionListener{
 	
 	private void addGroupButtonClicked() {
 		String gID = groupID.getText();
+		if(gID == "") {
+			return;
+		}
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
 				 userList.getLastSelectedPathComponent();
 		
@@ -196,6 +213,39 @@ public class Admin implements ActionListener{
 		}
 	}
 	
+	private void openUserButtonClicked() {
+		GroupComponentVisitor openUser = new OpenUser();
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
+				 userList.getLastSelectedPathComponent();
+		
+		//Has to select some user
+		if(node != null) {
+			//Has to be user and not a group
+			if(node.getAllowsChildren() == false) {
+				//Open User View
+				openUser.visitUser((User)node);
+			}
+		}
+	}
+	
+	private void userTotalButtonClicked() {
+		UserTotal userTotal = new UserTotal();
+		
+		root.accept(userTotal);
+		
+		//Redo for UI Later
+		System.out.println(userTotal.getCount());
+	}
+	
+	private void groupTotalButtonClicked() {
+		GroupTotal groupTotal = new GroupTotal();
+		
+		root.accept(groupTotal);
+		
+		//Redo for UI Later
+		System.out.println(groupTotal.getCount()-1);
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == addUser) {
@@ -205,13 +255,13 @@ public class Admin implements ActionListener{
 				addGroupButtonClicked();
 			}
 			else if(e.getSource() == openUser) {
-				
+				openUserButtonClicked();
 			}
 			else if(e.getSource() == userTotal) {
-				
+				userTotalButtonClicked();
 			}
 			else if(e.getSource() == groupTotal) {
-				
+				groupTotalButtonClicked();
 			}
 			else if(e.getSource() == messageTotal) {
 				
@@ -220,7 +270,7 @@ public class Admin implements ActionListener{
 				
 			}
 			else {
-				System.out.println(e.getSource());
+				System.out.println("Unexpected " + e.getSource());
 			}
 	}
 	

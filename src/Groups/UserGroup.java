@@ -12,7 +12,6 @@ public class UserGroup extends DefaultMutableTreeNode implements GroupComponent{
 	private String groupName;
 	
 	public UserGroup(String groupName) {
-		super();
 		setName(groupName);
 	}
 	
@@ -23,6 +22,9 @@ public class UserGroup extends DefaultMutableTreeNode implements GroupComponent{
 	
 	public void accept(GroupComponentVisitor visitor) {
 		visitor.visitUserGroup(this);
+		for(GroupComponent gc : groupComponent) {
+			gc.accept(visitor);
+		}
 	}
 	
 	public String getName() {
@@ -32,8 +34,6 @@ public class UserGroup extends DefaultMutableTreeNode implements GroupComponent{
 		groupName = name;
 	}
 	
-	
-	
 	public List<GroupComponent> getList(){
 		return groupComponent;
 	}
@@ -41,8 +41,6 @@ public class UserGroup extends DefaultMutableTreeNode implements GroupComponent{
 	public void setList(List<GroupComponent> groupComponent) {
 		this.groupComponent = groupComponent;
 	}
-	
-	
 	
 	public String toString() {
 		return groupName;
