@@ -1,13 +1,30 @@
 package Groups;
 
+import VisitUser.GroupComponentVisitor;
+
+@SuppressWarnings("serial")
 public class User extends Subject implements GroupComponent, Observer{
 	private String userName;
 
-	public String getUserName() {
+	public User(String name) {
+		userName = name;
+	}
+	
+	@Override
+	public boolean getAllowsChildren() {
+		return false;
+	}
+	
+	public void accept(GroupComponentVisitor visitor) {
+		visitor.visitUser(this);
+	}
+	
+	
+	public String getName() {
 		return userName;
 	}
 
-	public void setUserName(String userName) {
+	public void setName(String userName) {
 		this.userName = userName;
 	}
 
@@ -16,6 +33,10 @@ public class User extends Subject implements GroupComponent, Observer{
 	public void update(Subject subject) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public String toString() {
+		return userName;
 	}
 	
 	

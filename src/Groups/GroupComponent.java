@@ -1,5 +1,8 @@
 package Groups;
 
-public interface GroupComponent {
+import VisitUser.Visitable;
 
+public interface GroupComponent extends Visitable{
+	public String getName();
+	public void setName(String name);
 }

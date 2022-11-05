@@ -2,11 +2,15 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
+
+import Groups.*;
 
 
 public class Admin implements ActionListener{
@@ -19,8 +23,10 @@ public class Admin implements ActionListener{
 	
 	private JTextField userID, groupID;
 
-	private DefaultMutableTreeNode root;
-	private JTree userTree; 
+	private JScrollPane scrollPane;
+	private JTree userList;
+	private UserGroup root;
+	private static List<GroupComponent> temp = new ArrayList<>();
 	
 	
 	private JPanel pL = new JPanel();
@@ -42,11 +48,22 @@ public class Admin implements ActionListener{
 	}
 	
 	private void createLeftPanel() {
-		root =  new DefaultMutableTreeNode("Root");
-		DefaultMutableTreeNode vegetableNode = new DefaultMutableTreeNode("Vegetables");
-		root.add(vegetableNode);
-		userTree = new JTree(root);
-		pL.add(new JScrollPane(userTree));
+				
+		root = new UserGroup("Root");
+		root.setList(temp);
+				
+		userList = new JTree(root);
+		userList.getSelectionModel().setSelectionMode
+			(TreeSelectionModel.SINGLE_TREE_SELECTION);
+	
+		
+		scrollPane = new JScrollPane(userList,
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setPreferredSize(new Dimension( 200, 400));
+		
+		
+		pL.add(scrollPane, BorderLayout.CENTER);
 	}
 	
 	private void createRightLowerPanel() {
@@ -75,8 +92,8 @@ public class Admin implements ActionListener{
 	}
 	
 	private void createRightUpperPanel() {
-		userID = new JTextField("New User Name", 16);
-		groupID = new JTextField("New Group Name", 16);
+		userID = new JTextField("", 16);
+		groupID = new JTextField("", 16);
 		
 		addUser = new JButton("Add User");
 		addGroup = new JButton("Add Group");
@@ -114,20 +131,78 @@ public class Admin implements ActionListener{
 		mainPane.setEnabled(false);
 	}
 	
-	public static Admin getInstance() {
-		if (adminInstance == null) {
-			adminInstance = new Admin();
+	private void addUser(DefaultMutableTreeNode top, String name) {
+		User tmp = new User(name);
+		top.add(tmp);
+		
+		//Let JTree know that TreeModel was updated with new node
+		((DefaultTreeModel) userList.getModel()).
+			nodesWereInserted(top,new int[]{top.getChildCount()-1});
+	}
+	
+	private void addGroup(DefaultMutableTreeNode top, String name) {
+		UserGroup tmp = new UserGroup(name);
+		top.add(tmp);
+		
+		//Let JTree know that TreeModel was updated with new node
+		((DefaultTreeModel) userList.getModel()).
+		nodesWereInserted(top,new int[]{top.getChildCount()-1});
+
+	}
+	
+	private void addUserButtonClicked() {
+		String uID = userID.getText();
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
+			 userList.getLastSelectedPathComponent();
+		
+		//No location selected
+		if(node == null) { 
+			addUser(root, uID);
 		}
-		return adminInstance;
+		else {
+			//If it is a group
+			//Add to group
+			if(node.getAllowsChildren() == true) {
+				addUser(node, uID);
+			}
+			//Otherwise it is a child
+			//Add to parent node
+			else {
+				UserGroup tmp = (UserGroup) node.getParent();
+				addUser(tmp, uID);
+			}
+		}
+	}
+	
+	private void addGroupButtonClicked() {
+		String gID = groupID.getText();
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
+				 userList.getLastSelectedPathComponent();
+		
+		//No Selected Location
+		if(node == null) {
+			addGroup(root, gID);
+		}
+		else {
+			//Adding to Selected Group
+			if(node.getAllowsChildren() == true) {
+				addGroup(node, gID);
+			}
+			//If it is a child then find it's parent
+			else {
+				UserGroup tmp = (UserGroup) node.getParent();
+				addUser(tmp, gID);
+			}
+		}
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == addUser) {
-				System.out.println(userTree.getSelectionPath());
+				addUserButtonClicked();
 			}
 			else if(e.getSource() == addGroup) {
-				
+				addGroupButtonClicked();
 			}
 			else if(e.getSource() == openUser) {
 				
@@ -144,6 +219,16 @@ public class Admin implements ActionListener{
 			else if(e.getSource() == positivePercentage) {
 				
 			}
+			else {
+				System.out.println(e.getSource());
+			}
+	}
+	
+	public static Admin getInstance() {
+		if (adminInstance == null) {
+			adminInstance = new Admin();
+		}
+		return adminInstance;
 	}
 	
 
