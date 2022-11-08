@@ -9,6 +9,7 @@ public class OpenUser implements GroupComponentVisitor{
 	@Override
 	public void visitUser(User user) {
 		UserWindow userWindow = new UserWindow(user);
+		user.setUserWindow(userWindow);
 	}
 
 	@Override

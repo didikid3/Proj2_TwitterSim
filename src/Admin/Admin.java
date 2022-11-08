@@ -1,3 +1,4 @@
+package Admin;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -208,7 +209,7 @@ public class Admin implements ActionListener{
 			//If it is a child then find it's parent
 			else {
 				UserGroup tmp = (UserGroup) node.getParent();
-				addUser(tmp, gID);
+				addGroup(tmp, gID);
 			}
 		}
 	}
@@ -272,6 +273,13 @@ public class Admin implements ActionListener{
 			else {
 				System.out.println("Unexpected " + e.getSource());
 			}
+	}
+	
+	public JTree getUserList() {
+		return userList;
+	}
+	public UserGroup getRoot(){
+		return root;
 	}
 	
 	public static Admin getInstance() {

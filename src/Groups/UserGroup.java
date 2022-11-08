@@ -34,6 +34,18 @@ public class UserGroup extends DefaultMutableTreeNode implements GroupComponent{
 		groupName = name;
 	}
 	
+	public User findUser(String name) {
+		User tmp = null;
+		for(GroupComponent gc: groupComponent) {
+			tmp = gc.findUser(name);
+			if(tmp != null) {
+				break;
+			}
+		}
+		
+		return tmp;
+	}
+	
 	public List<GroupComponent> getList(){
 		return groupComponent;
 	}
