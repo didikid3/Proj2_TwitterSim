@@ -40,6 +40,10 @@ public class User extends Subject implements GroupComponent, Observer{
 		return tweets.lastElement();
 	}
 	
+	public DefaultListModel<String> getTweetList(){
+		return tweets;
+	}
+	
 	public DefaultListModel<String> getFollowingList() {
 		return followingList;
 	}

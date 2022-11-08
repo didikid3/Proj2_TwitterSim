@@ -247,6 +247,14 @@ public class Admin implements ActionListener{
 		System.out.println(groupTotal.getCount()-1);
 	}
 	
+	private void messageTotalButtonClicked() {
+		MessageTotal messageTotal = new MessageTotal();
+		
+		root.accept(messageTotal);
+		
+		System.out.println(messageTotal.getCount());
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == addUser) {
@@ -265,7 +273,7 @@ public class Admin implements ActionListener{
 				groupTotalButtonClicked();
 			}
 			else if(e.getSource() == messageTotal) {
-				
+				messageTotalButtonClicked();
 			}
 			else if(e.getSource() == positivePercentage) {
 				
