@@ -235,7 +235,10 @@ public class Admin implements ActionListener{
 		root.accept(userTotal);
 		
 		//Redo for UI Later
-		System.out.println(userTotal.getCount());
+		int msg = userTotal.getCount();
+		
+		JOptionPane.showMessageDialog(null, msg, "User Total", 
+				JOptionPane.PLAIN_MESSAGE);
 	}
 	
 	private void groupTotalButtonClicked() {
@@ -243,16 +246,31 @@ public class Admin implements ActionListener{
 		
 		root.accept(groupTotal);
 		
-		//Redo for UI Later
-		System.out.println(groupTotal.getCount()-1);
+		int msg = groupTotal.getCount()-1;
+		JOptionPane.showMessageDialog(null, msg, "Group Total", 
+				JOptionPane.PLAIN_MESSAGE);
 	}
 	
 	private void messageTotalButtonClicked() {
 		MessageTotal messageTotal = new MessageTotal();
 		
 		root.accept(messageTotal);
+		int msg = messageTotal.getCount();
 		
-		System.out.println(messageTotal.getCount());
+		JOptionPane.showMessageDialog(null, msg, "Message Total", 
+				JOptionPane.PLAIN_MESSAGE);
+		
+	}
+	
+	private void positiveMessageButtonClicked() {
+		PositiveMessagePercentage positivePercentage = 
+				new PositiveMessagePercentage();
+		
+		root.accept(positivePercentage);
+		
+		String msg = Double.toString(positivePercentage.getPercentage()*100);
+		JOptionPane.showMessageDialog(null, msg+"%", "Positive Percentage", 
+				JOptionPane.PLAIN_MESSAGE);
 	}
 	
 	@Override
@@ -275,8 +293,10 @@ public class Admin implements ActionListener{
 			else if(e.getSource() == messageTotal) {
 				messageTotalButtonClicked();
 			}
+			//Will classify positive messages as those with
+			//"yay" in the message
 			else if(e.getSource() == positivePercentage) {
-				
+				positiveMessageButtonClicked();
 			}
 			else {
 				System.out.println("Unexpected " + e.getSource());
