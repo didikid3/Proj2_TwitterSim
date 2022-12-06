@@ -21,6 +21,7 @@ public class Admin implements ActionListener{
 	private JFrame frame = new JFrame();
 	
 	private JButton addUser, addGroup, openUser;
+	private JButton valididate, lastUpdated;
 	private JButton userTotal, groupTotal, messageTotal, positivePercentage;
 	
 	private JTextField userID, groupID;
@@ -100,22 +101,30 @@ public class Admin implements ActionListener{
 		addUser = new JButton("Add User");
 		addGroup = new JButton("Add Group");
 		openUser = new JButton("Open User View");
+		valididate = new JButton("Validate Entries");
+		lastUpdated = new JButton("Last Updated");
 		
 		addUser.addActionListener(this);
 		addGroup.addActionListener(this);
 		openUser.addActionListener(this);
+		valididate.addActionListener(this);
+		lastUpdated.addActionListener(this);
 		
 		JSplitPane tmp1 = new JSplitPane(SwingConstants.HORIZONTAL, userID, addUser);
 		JSplitPane tmp2 = new JSplitPane(SwingConstants.HORIZONTAL, groupID, addGroup);
 		JSplitPane tmp3 = new JSplitPane(SwingConstants.VERTICAL, tmp1, tmp2);
-		JSplitPane tmp4 = new JSplitPane(SwingConstants.HORIZONTAL, tmp3, openUser);
+
+		JSplitPane tmp4 = new JSplitPane(SwingConstants.HORIZONTAL, openUser, valididate);
+		JSplitPane tmp5 = new JSplitPane(SwingConstants.HORIZONTAL, tmp4, lastUpdated);
+
+		JSplitPane tmp6 = new JSplitPane(SwingConstants.HORIZONTAL, tmp3, tmp5);
 		
 		tmp1.setEnabled(false);
 		tmp2.setEnabled(false);
 		tmp3.setEnabled(false);
 		tmp4.setEnabled(false);
 		
-		pRightUpper.add(tmp4);
+		pRightUpper.add(tmp6);
 	}
 	
 	private void createRightPanel() {
@@ -229,6 +238,33 @@ public class Admin implements ActionListener{
 		}
 	}
 	
+	private void vaildidateButtonClicked(){
+		NameVaildation validate = new NameVaildation();
+		
+		root.accept(validate);
+		boolean valid = validate.valid();
+
+		JOptionPane.showMessageDialog(null, valid, "Valid or Not", 
+				JOptionPane.PLAIN_MESSAGE);
+	}
+
+	private void findLastUpdated(){
+		LastUpdated lastUpdated = new LastUpdated();
+		root.accept(lastUpdated);
+		String name;
+		if(lastUpdated.exists()){
+			name = lastUpdated.lastUpdated();
+			JOptionPane.showMessageDialog(null, name, "Last Updated", 
+				JOptionPane.PLAIN_MESSAGE);
+		}
+		else{
+			name = "No Tweets have been sent.";
+			JOptionPane.showMessageDialog(null, name, "Last Updated", 
+				JOptionPane.PLAIN_MESSAGE);
+		}
+
+	}
+
 	private void userTotalButtonClicked() {
 		UserTotal userTotal = new UserTotal();
 		
@@ -286,6 +322,12 @@ public class Admin implements ActionListener{
 			}
 			else if(e.getSource() == userTotal) {
 				userTotalButtonClicked();
+			}
+			else if(e.getSource() == valididate){
+				vaildidateButtonClicked();
+			}
+			else if(e.getSource() == lastUpdated){
+				findLastUpdated();
 			}
 			else if(e.getSource() == groupTotal) {
 				groupTotalButtonClicked();

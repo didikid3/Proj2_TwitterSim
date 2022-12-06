@@ -11,8 +11,11 @@ public class UserGroup extends DefaultMutableTreeNode implements GroupComponent{
 	private List<GroupComponent> groupComponent;
 	private String groupName;
 	
+	private long createTime;
+
 	public UserGroup(String groupName) {
 		setName(groupName);
+		createTime = System.currentTimeMillis();
 	}
 	
 	@Override
@@ -27,6 +30,10 @@ public class UserGroup extends DefaultMutableTreeNode implements GroupComponent{
 		}
 	}
 	
+	public long getCreateTime(){
+		return createTime;
+	}
+
 	public String getName() {
 		return groupName;
 	}

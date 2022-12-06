@@ -15,12 +15,17 @@ public class User extends Subject implements GroupComponent, Observer{
 	private DefaultListModel<String> followingList;
 	private DefaultListModel<String> tweets;
 
+	private long createTime;
+	private long updateTime;
+
 	public User(String name) {
 		userName = name;
 		followingList = new DefaultListModel<>();
 		tweets = new DefaultListModel<>();
+		createTime = System.currentTimeMillis();
+		updateTime = 0;
 	}
-	
+
 	@Override
 	public boolean getAllowsChildren() {
 		return false;
@@ -33,6 +38,7 @@ public class User extends Subject implements GroupComponent, Observer{
 	}
 	
 	public void sendTweet(String tweet) {
+		updateTime = System.currentTimeMillis();
 		tweets.addElement(tweet);
 	}
 	
@@ -63,6 +69,14 @@ public class User extends Subject implements GroupComponent, Observer{
 		userWindow = window;
 	}
 	
+	public long getCreateTime(){
+		return createTime;
+	}
+
+	public long getUpdateTime(){
+		return updateTime;
+	}
+
 	public String getName() {
 		return userName;
 	}
@@ -74,8 +88,9 @@ public class User extends Subject implements GroupComponent, Observer{
 	//When new post on twitter
 	@Override
 	public void update(Subject subject) {
+		updateTime = System.currentTimeMillis();
 		User tmp = (User) subject;
-		userWindow.updateNewsFeed("[" + tmp.getName() + "]: "
+		userWindow.updateNewsFeed("[" + String.valueOf(updateTime) + "]: [" + tmp.getName() + "]: "
 				+ tmp.getMostRecentTweet());
 		
 	}
